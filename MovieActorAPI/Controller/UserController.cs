@@ -24,18 +24,17 @@ namespace MovieActorAPI.Controller
 
         // POST: api/User
         [HttpPost]
-        public ActionResult<User> CreateUser(User user)
+        public ActionResult<User> CreateUser(UserTemplete user)
         {
             if (_context.Users.Any(u => u.UserName == user.UserName))
             {
                 return BadRequest("Username already exists");
             }
-
-            user.UserId = _context.Users.Count() + 1; // Auto-increment ID
-            _context.Users.Add(user);
+            User user1 = new User { Email=user.Email, Password=user.Password, UserName=user.UserName};
+            _context.Users.Add(user1);
             _context.SaveChanges();
 
-            return CreatedAtAction(nameof(GetUser), new { id = user.UserId }, user);
+            return CreatedAtAction(nameof(GetUser), new { id = user1.UserId }, user1);
         }
 
         [HttpGet]
